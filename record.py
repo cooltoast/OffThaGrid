@@ -42,7 +42,7 @@ def getEventURL(eventId):
 def scrape():
   eventsUrl = getEventsURL()
   r = requests.get(eventsUrl)
-  vendors = [x.name for x in Vendor.objects.all()]
+  vendors = Vendor.objects.all()
   for event in r.json()["data"]:
     eventId = event["id"]
     print "getting %s's desc" % eventId
@@ -50,8 +50,12 @@ def scrape():
     r2 = requests.get(eventUrl)
     desc = r2.json()["description"]
     for vendor in vendors:
-      if bool(re.search(vendor, desc, re.IGNORECASE)):
-        print "vendor %s in desc" % vendor
+      if bool(re.search(vendor.name, desc, re.IGNORECASE)):
+        print "vendor %s in desc" % vendor.name
+        vendor.attended += 1
+        vendor.save()
+        ev = Event(vendor=vendor)
+        ev.save()
 
 
 
