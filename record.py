@@ -6,7 +6,7 @@ from django.conf import settings
 import django
 django.setup()
 
-from lunch.models import Event, Vendor
+from lunch.models import Vendor
 import json
 import re
 import requests
@@ -63,8 +63,6 @@ def scrape():
           WFvendors.append(vendor.name)
         vendor.attended += 1
         vendor.save()
-        ev = Event(vendor=vendor)
-        ev.save()
 
   if WF:
     HipChatModule.sendUpdate(WFvendors)

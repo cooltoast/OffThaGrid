@@ -11,10 +11,8 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
+        migrations.RemoveField(
             model_name='event',
-            name='vendor',
-            field=models.ForeignKey(default=0, to='lunch.Vendor'),
-            preserve_default=True,
+            name='location',
         ),
     ]
