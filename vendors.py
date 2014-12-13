@@ -22,7 +22,7 @@ def saveVendors(scrape):
   if scrape == "scrape":
     vendors = getVendors()
     for x in vendors:
-      v = Vendor(name=x.lower())
+      v = Vendor(name=x)
       v.save()
     print "Saved %d vendors to db" % len(vendors)
   else:

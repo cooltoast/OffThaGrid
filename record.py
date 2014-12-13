@@ -3,12 +3,17 @@ sys.path.append('/opt/myenv/gingerio/lunch')
 os.environ['DJANGO_SETTINGS_MODULE'] = 'gingerio.settings'
 from django.conf import settings
 
+import django
+django.setup()
+
 from lunch.models import Event, Vendor
 import json
 import re
 import requests
 import time
 from datetime import datetime, timedelta
+
+import hipChat as HipChatModule
 
 def getTimeRange():
   now = datetime.now()
@@ -43,6 +48,8 @@ def scrape():
   eventsUrl = getEventsURL()
   r = requests.get(eventsUrl)
   vendors = Vendor.objects.all()
+  WFvendors = []
+  WF = (datetime.today().weekday() == 2) or (datetime.today().weekday() == 4)
   for event in r.json()["data"]:
     eventId = event["id"]
     print "getting %s's desc" % eventId
@@ -50,20 +57,19 @@ def scrape():
     r2 = requests.get(eventUrl)
     desc = r2.json()["description"]
     for vendor in vendors:
-      if bool(re.search(vendor.name, desc, re.IGNORECASE)):
+      if re.search(vendor.name, desc, re.IGNORECASE):
         print "vendor %s in desc" % vendor.name
+        if WF and re.search('5th and Minna', r2.json()["name"], re.IGNORECASE):
+          WFvendors.append(vendor.name)
         vendor.attended += 1
         vendor.save()
         ev = Event(vendor=vendor)
         ev.save()
 
+  if WF:
+    HipChatModule.sendUpdate(WFvendors)
 
-
-  import pdb;pdb.set_trace()
-
-
-
-  
+  return
 
 if __name__ == '__main__':
   scrape()
