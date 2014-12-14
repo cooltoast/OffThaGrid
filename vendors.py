@@ -27,7 +27,8 @@ def saveVendors(scrape):
     print "Saved %d vendors to db" % len(vendors)
   else:
     for x in Vendor.objects.all():
-      print "%s: %d" % (x.name, x.attended)
+      if x.attended > 0:
+        print "%s: %d" % (x.name, x.attended)
    
 if __name__ == '__main__':
   saveVendors(sys.argv[1])

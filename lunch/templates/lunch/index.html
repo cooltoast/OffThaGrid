@@ -1,0 +1,9 @@
+{% if vendors %}
+    <ul>
+    {% for vendor in vendors %}
+        <li><a href="{% url 'detail' vendor.id %}">{{ vendor.name }}: {{vendor.attended}}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No vendors is available at this time.</p>
+{% endif %}
