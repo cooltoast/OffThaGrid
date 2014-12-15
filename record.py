@@ -126,4 +126,16 @@ def scrapeEvents(test):
   return
 
 if __name__ == '__main__':
-  scrapeEvents(True)
+  events = Event.objects.order_by('date')
+
+  # if there are events in table, find the latest one's date
+  if events:
+    latestEventDate = events.last().date
+    now = timezone.now()
+    today = datetime(now.year, now.month, now.day)
+  # scrape events if no events in table, or if I haven't already scraped today.
+  # I'll know the latter if the date of the latest event in the table isn't today.
+  if ((not events) or (today != latestEventDate)):
+    scrapeEvents(True)
+  else:
+    print "already scraped events today, %s" % today
