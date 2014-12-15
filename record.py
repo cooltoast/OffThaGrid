@@ -17,6 +17,15 @@ from datetime import datetime, timedelta
 import hipChat as HipChatModule
 import vendors as VendorsModule
 
+class Keys():
+  def __init__(self):
+    data = open('keys.json')
+    self.keys = json.load(data)
+    self.access_token = '%s|%s' % (self.keys["app_id"], self.keys["app_secret"])
+    data.close()
+
+  pass
+
 def getTimeRange():
   now = timezone.now()
   today = datetime(now.year, now.month, now.day)
@@ -24,27 +33,20 @@ def getTimeRange():
   tmrw_midnight = today + timedelta(days=1)
   tomorrowMid = int(time.mktime(tmrw_midnight.timetuple()))
 
-  return 'since=%d&until=%d' % (prevMid, tomorrowMid)
+  return prevMid, tomorrowMid
 
-def getEventsURL():
-  data = open('keys.json')
-  keys = json.load(data)
-  data.close()
+def getEventsURL(keys):
+  since, until = getTimeRange()
+  url = 'https://graph.facebook.com/OffTheGridSF/events'
 
-  timeRange = getTimeRange()
-  access_token = '%s|%s' % (keys["app_id"], keys["app_secret"])
-  url = 'https://graph.facebook.com/OffTheGridSF/events?%s&access_token=%s' % (timeRange, access_token)
-  return url
+  # filter events only for today using since and until timestamps
+  options = {
+    "since": since,
+    "until": until,
+    "access_token": keys.access_token,
+  }
 
-def getEventURL(eventId):
-  data = open('keys.json')
-  keys = json.load(data)
-  data.close()
-
-  access_token = '%s|%s' % (keys["app_id"], keys["app_secret"])
-  url = 'https://graph.facebook.com/%s?access_token=%s' % (eventId, access_token)
-  return url
-
+  return url, options
 
 # Reset all vendor attended counts to 0, and for
 # each event in the last 30 days, increment their attended count.
@@ -59,7 +61,7 @@ def updateVendors():
   today = datetime(now.year, now.month, now.day)
   thirtyDaysAgo = today - timedelta(days=30)
 
-  # get all events from past 30 days
+  # get all events within past 30 days
   events = Event.objects.filter(date__gte=thirtyDaysAgo)
 
   for event in events:
@@ -76,9 +78,10 @@ def updateVendors():
 
   
 
-def scrapeEvents(test):
-  eventsUrl = getEventsURL()
-  r = requests.get(eventsUrl)
+def scrapeEvents(test, keys):
+  eventsUrl, eventsOptions = getEventsURL(keys)
+  r = requests.get(eventsUrl, params=eventsOptions)
+  events = r.json()["data"]
 
   vendors = Vendor.objects.all()
 
@@ -90,13 +93,14 @@ def scrapeEvents(test):
   now = timezone.now()
   today = datetime(now.year, now.month, now.day)
 
-  for event in r.json()["data"]:
+  for event in events:
     eventId = event["id"]
-    print "getting %s's desc" % eventId
-    eventUrl = getEventURL(eventId)
-    r2 = requests.get(eventUrl)
-    desc = r2.json()["description"]
 
+    eventUrl = 'https://graph.facebook.com/%s' % eventId
+    r2 = requests.get(eventUrl, params={'access_token':keys.access_token})
+
+    desc = r2.json()["description"]
+    eventName = r2.json()["name"]
 
     # unfortunately, the facebook description page is not consistent with
     # how they list the vendors appearing. just run through the list of
@@ -106,7 +110,7 @@ def scrapeEvents(test):
         print "vendor %s in desc" % vendor.name
 
         # add vendor if they're at 5th & Minna and its wednesday or friday
-        if WF and re.search('5th and Minna', r2.json()["name"], re.IGNORECASE):
+        if WF and re.search('5th and Minna', eventName, re.IGNORECASE):
           WFvendors.append(vendor.name)
 
         '''
@@ -136,6 +140,7 @@ if __name__ == '__main__':
   # scrape events if no events in table, or if I haven't already scraped today.
   # I'll know the latter if the date of the latest event in the table isn't today.
   if ((not events) or (today != latestEventDate)):
-    scrapeEvents(True)
+    keys = Keys()
+    scrapeEvents(True, keys)
   else:
     print "already scraped events today, %s" % today
