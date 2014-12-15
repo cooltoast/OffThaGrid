@@ -28,7 +28,7 @@ def saveVendors(scrape):
   else:
     for x in Vendor.objects.all():
       if x.attended > 0:
-        print "%s: %d" % (x.name, x.attended)
+        print "%s: %s, %d" % (x.name, x.date, x.attended)
    
 if __name__ == '__main__':
   saveVendors(sys.argv[1])
