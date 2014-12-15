@@ -1,7 +1,7 @@
 import json
 import requests
 
-def sendUpdate(vendors):
+def sendUpdate(vendors, test):
   data = open('keys.json')
   keys = json.load(data)
   data.close()
@@ -13,9 +13,13 @@ def sendUpdate(vendors):
   message += ", ".join(vendors)
   message += "."
 
+  realRoomId = '1054347'
+  testRoomId = '1049099'
+
+  room_id = testRoomId if test else realRoomId
 
   options = {
-    "room_id":"1049099",
+    "room_id": room_id,
     "auth_token": auth_token,
     "from":"Markan",
     "message":message
@@ -26,4 +30,4 @@ def sendUpdate(vendors):
   print message
 
 if __name__ == '__main__':
-  sendUpdate(['vendor1','vendor2','vendor3'])
+  sendUpdate(['vendor1','vendor2','vendor3'], True)

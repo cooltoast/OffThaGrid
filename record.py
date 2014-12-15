@@ -44,7 +44,7 @@ def getEventURL(eventId):
   return url
   
 
-def scrape():
+def scrape(test):
   eventsUrl = getEventsURL()
   r = requests.get(eventsUrl)
   vendors = Vendor.objects.all()
@@ -64,10 +64,10 @@ def scrape():
         vendor.attended += 1
         vendor.save()
 
-  if WF:
-    HipChatModule.sendUpdate(WFvendors)
+  if WF or test:
+    HipChatModule.sendUpdate(WFvendors, test)
 
   return
 
 if __name__ == '__main__':
-  scrape()
+  scrape(True)
