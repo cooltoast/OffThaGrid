@@ -26,7 +26,9 @@ def scrapeVendors():
   for x in vendors:
     v = Vendor(name=x)
     v.save()
-  print "Saved %d vendors to db" % len(vendors)
+  v = Vendor(name="Smothered Fries")
+  v.save()
+  print "Saved %d vendors to db" % (len(vendors) + 1)
 
 def resetVendors():
   for x in Vendor.objects.all():
