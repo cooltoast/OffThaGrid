@@ -19,7 +19,7 @@ import vendors as VendorsModule
 
 class Keys():
   def __init__(self):
-    data = open('keys.json')
+    data = open('/var/www/gingerio/keys.json')
     self.keys = json.load(data)
     self.access_token = '%s|%s' % (self.keys["app_id"], self.keys["app_secret"])
     data.close()
@@ -78,7 +78,8 @@ def updateVendors():
 
   
 
-def scrapeEvents(test, keys):
+def scrapeEvents():
+  keys = Keys()
   eventsUrl, eventsOptions = getEventsURL(keys)
   r = requests.get(eventsUrl, params=eventsOptions)
   events = r.json()["data"]
@@ -140,7 +141,6 @@ if __name__ == '__main__':
   # scrape events if no events in table, or if I haven't already scraped today.
   # I'll know the latter if the date of the latest event in the table isn't today.
   if ((not events) or (today != latestEventDate)):
-    keys = Keys()
-    scrapeEvents(True, keys)
+    scrapeEvents()
   else:
-    print "already scraped events today, %s" % today
+    print "already scraped events today, %s" % now

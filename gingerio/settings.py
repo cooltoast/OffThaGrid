@@ -18,7 +18,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 import json
-data = open('keys.json')
+data = open('/var/www/gingerio/keys.json')
 keys = json.load(data)
 data.close()
 SECRET_KEY = keys['secret_key']

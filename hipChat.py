@@ -1,22 +1,22 @@
 import json
 import requests
 
-def sendUpdate(vendors, test):
-  data = open('keys.json')
+def sendUpdate(vendors):
+  data = open('/var/www/gingerio/keys.json')
   keys = json.load(data)
   data.close()
 
   url = 'https://api.hipchat.com/v1/rooms/message'
   auth_token = keys['access_token']
 
-  message = 'Hey guys! Here are the vendors at 5th and Minna for today: '
-  message += ", ".join(vendors)
-  message += "."
+  if not vendors:
+    message = 'Hey guys. Unfortunately there are no vendors at 5th and Minna today.'
+  else:
+    message = 'Hey guys! Here are the vendors at 5th and Minna for today: '
+    message += ", ".join(vendors)
+    message += "."
 
-  realRoomId = '1054347'
-  testRoomId = '1049099'
-
-  room_id = testRoomId if test else realRoomId
+  room_id = keys['room_id']
 
   options = {
     "room_id": room_id,
@@ -26,7 +26,6 @@ def sendUpdate(vendors, test):
   }
 
   r = requests.get(url, params=options)
-  print options
   print message
 
 if __name__ == '__main__':
