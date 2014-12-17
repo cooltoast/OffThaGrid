@@ -17,7 +17,7 @@ Module Overview
 
 Crontab setup:
 ```
-0 14  *   *   *    /path/to/project/record.sh >> /path/to/project/cron.log 2>&1
+0 19  *   *   *    /path/to/project/record.sh >> /path/to/project/cron.log 2>&1
 ```
 
 Install requirements in your virtualenv
