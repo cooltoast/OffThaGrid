@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="{{ STATIC_URL }}lunch/tablesort/jquery-latest.js"></script>
+  <script src="{{ STATIC_URL }}lunch/tablesort/jquery.tablesorter.js"></script>
+  <link href='http://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+  <style>
+    html, body, h1, h2, table {
+      font-family: 'Montserrat', sans-serif;
+    }
+    .center {
+        margin-left: auto;
+        margin-right: auto;
+    }
+  </style>
+</head>
+<body>
+  <h2 style="text-align:center">{{ vendor.name }}</h2>
+  <div style='text-align:center'>
+    {{ vendor.name }} has attended {{ vendor.attended }} events in the last 30 days.
+  </div>
+</body>

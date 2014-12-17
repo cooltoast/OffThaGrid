@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="{{ STATIC_URL }}lunch/tablesort/jquery-latest.js"></script>
+  <script src="{{ STATIC_URL }}lunch/tablesort/jquery.tablesorter.js"></script>
+  <link href='http://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+  <style>
+    html, body, h1, h2, table {
+      font-family: 'Montserrat', sans-serif;
+    }
+    .center {
+        margin-left: auto;
+        margin-right: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1 style="text-align:center">Click "Name" or "Events Attended" to sort vendors.</h1>
+  <script>
+    $(document).ready(function() {
+      $("#myTable").tablesorter();
+    });
+  </script>
+  {% if vendors %}
+    <table id="myTable" class="tablesorter center">
+      <thead>
+      <tr>
+          <th style='text-align:left'><a href='#'>Name</a></th>
+          <th><a href='#'>Events Attended</a></th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for vendor in vendors %}
+        <tr>
+            <td><a href="{% url 'vendor' vendor.id %}">{{ vendor.name }}</a></td>
+            <td>{{vendor.attended}}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+
+  {% else %}
+      <p>No vendors are available at this time.</p>
+  {% endif %}
+
+
+</body>

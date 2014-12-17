@@ -6,6 +6,7 @@ urlpatterns = patterns('',
     # url(r'^$', 'gingerio.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
 
+    url(r'^$', 'gingerio.views.home', name='home'),
     url(r'^lunch/', include('lunch.urls')),
     url(r'^admin/', include(admin.site.urls)),
 )
