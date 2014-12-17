@@ -123,8 +123,8 @@ def scrapeEvents():
         e.save()
 
 
-  if WF or test:
-    HipChatModule.sendUpdate(WFvendors, test)
+  if WF:
+    HipChatModule.sendUpdate(WFvendors)
 
   updateVendors()
 
