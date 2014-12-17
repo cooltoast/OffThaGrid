@@ -1,6 +1,6 @@
 OffThaGrid
 ==========
-HipChat room: https://www.hipchat.com/gAPbd12VR
+HipChat room: https://www.hipchat.com/gg6xjAniq
 
 There's a couple modules I used for this project. Here's an overview of what they each do.
 
@@ -11,7 +11,7 @@ Module Overview
 | ------------- | ----------- |
 | events | **Clears** Events from database, **prints** Events from database (depending on sys.argv option)|
 | vendors | **Scrapes** Vendors from [OffTheGrid](http://offthegridsf.com/vendors#food), **resets** all Vendor's attended attributes in database, **prints** Vendors from database (depending on sys.argv option) |
-| hipChat | **Posts** all Vendors at 5th & Minna to [HipChat room] (https://www.hipchat.com/gAPbd12VR) |
+| hipChat | **Posts** all Vendors at 5th & Minna to [HipChat room] (https://www.hipchat.com/gg6xjAniq) |
 | record | **Requests** all [Facebook Events](https://www.facebook.com/OffTheGridSF/events) for that day, **queries**  event description for Vendors, **calls** hipChat module, **updates** all Vendor attended attributes in database |
 
 
