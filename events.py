@@ -11,7 +11,7 @@ from lunch.models import Event
 def clearEvents():
   Event.objects.all().delete()
 
-def printEvents(attendedFilter):
+def printEvents():
   for x in Event.objects.all():
     print "%s: %s" % (x.name, x.date)
 
@@ -19,7 +19,7 @@ def eventAction(opt):
   if opt == "clear":
     clearEvents()
   else:
-    printEvents(0)
+    printEvents()
 
 if __name__ == '__main__':
   eventAction(sys.argv[1])

@@ -55,7 +55,10 @@ def getEventsURL(keys):
 # dependent on consistently scraping events without fail.
 # Also, I think this method is more explicit and straightforward.
 def updateVendors():
-  VendorsModule.resetVendors()
+  # 2014.12.21
+  # don't need to reset vendor attended integer attribute
+  # we'll just overwrite it with the correct amount once per day.
+  # VendorsModule.resetVendors()
 
   now = timezone.now()
   today = datetime(now.year, now.month, now.day)
@@ -64,14 +67,24 @@ def updateVendors():
   # get all events within past 30 days
   events = Event.objects.filter(date__gte=thirtyDaysAgo)
 
+  vendorCount = {}
+
+  # first, count up all the vendor appearances over last 30 days
   for event in events:
+    if event.name in vendorCount:
+      vendorCount[event.name] += 1
+    else:
+      vendorCount[event.name] = 1
+
+  # overwrite each vendor appearance count
+  for vendorName in vendorCount:
     try:
-      v = Vendor.objects.get(name__iexact=event.name)
+      v = Vendor.objects.get(name__iexact=vendorName)
     except Vendor.MultipleObjectsReturned:
       # do something
       continue
 
-    v.attended += 1
+    v.attended = vendorCount[vendorName]
     v.save()
 
   return
@@ -114,11 +127,6 @@ def scrapeEvents():
         if WF and re.search('5th and Minna', eventName, re.IGNORECASE):
           WFvendors.append(vendor.name)
 
-        '''
-        vendor.attended += 1
-        vendor.save()
-        '''
-
         e = Event(name=vendor.name, date=today)
         e.save()
 
@@ -131,16 +139,21 @@ def scrapeEvents():
   return
 
 if __name__ == '__main__':
-  events = Event.objects.order_by('date')
 
   # if there are events in table, find the latest one's date
-  if events:
-    latestEventDate = events.last().date
+  # and scrape events if latest event is before today.
+  # else if there are no events in table, scrape events anyway.
+  try:
+    latestEventDate = Event.objects.order_by('-date')[0].date
+  except IndexError: # scrape events if no events in table
+    scrapeEvents()
+  else: # inspect the latest event's date in the table, compare to today
     now = timezone.now()
     today = datetime(now.year, now.month, now.day)
-  # scrape events if no events in table, or if I haven't already scraped today.
-  # I'll know the latter if the date of the latest event in the table isn't today.
-  if ((not events) or (today != latestEventDate)):
-    scrapeEvents()
-  else:
-    print "already scraped events today, %s" % now
+
+    # I haven't already scraped today, scrape events.
+    # I'll know that if the date of the latest event in the table isn't today.
+    if (today != latestEventDate):
+      scrapeEvents()
+    else:
+      print "already scraped events today, %s" % now

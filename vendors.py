@@ -17,18 +17,29 @@ def getVendors():
   yo = query('.otg-vendor-name').find('.otg-vendor-name-link')
   vendors = yo.contents()
   vendors = list(set(vendors))
+  vendors.append("Smothered Fries")
   vendors.sort()
   vendors[0] = vendors[0][1:]
   return vendors
 
 def scrapeVendors():
   vendors = getVendors()
+  vendorsAdded = 0
   for x in vendors:
-    v = Vendor(name=x)
-    v.save()
-  v = Vendor(name="Smothered Fries")
-  v.save()
-  print "Saved %d vendors to db" % (len(vendors) + 1)
+    # avoid adding duplicates to the Vendor table.
+    # see if the vendor is already in the table
+    try:
+      Vendor.objects.get(name__iexact=x)
+    # if its not in the table, add it
+    except Vendor.DoesNotExist:
+      v = Vendor(name=x)
+      v.save()
+      vendorsAdded += 1
+    # else, move on to the next vendor
+    else:
+      continue
+
+  print "Saved %d new vendors to db" % vendorsAdded
 
 def resetVendors():
   for x in Vendor.objects.all():
