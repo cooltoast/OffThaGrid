@@ -1,41 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-  <head> 
-    <link href='http://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
-    <style>
-      html, body, h1, h2 {
-        font-family: 'Montserrat', sans-serif;
-      }
-      .center {
-          margin-left: auto;
-          margin-right: auto;
-      }
-    </style>
-  </head>
-  <body>
+{% block title %}
+  <h1 style="text-align:center">Ginger.io Software Engineer Intern Test Project</h1>
+  <h2 style="text-align:center">Markan Patel</h2>
+{% endblock %}
 
-    <h1 style="text-align:center">Ginger.io Software Engineer Intern Test Project</h1>
-    <h2 style="text-align:center">Markan Patel</h2>
-  
-    <br>
-    <br>
+{% block vendorContent %}
+  <br>
+  <br>
 
-    <div style="text-align:center">
-      <a href="/lunch">Vendor leaderboard</a>
-    </div>
+  <div style="text-align:center">
+    <a href="/lunch">Vendor leaderboard</a>
+  </div>
 
-    <br>
+  <br>
 
-    <div style="text-align:center">
-      <a href="https://www.hipchat.com/gg6xjAniq">5th & Minna Wednesday/Friday HipChat room</a>
-    </div>
+  <div style="text-align:center">
+    <a href="https://www.hipchat.com/gg6xjAniq">5th & Minna Wednesday/Friday HipChat room</a>
+  </div>
 
-    <br>
+  <br>
 
-    <div style="text-align:center">
-      <a href="https://github.com/cooltoast/OffThaGrid">Source code</a>
-    </div>
-    
-  </body>
-</html>
+  <div style="text-align:center">
+    <a href="https://github.com/cooltoast/OffThaGrid">Source code</a>
+  </div>
+{% endblock %}

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="{{ STATIC_URL }}lunch/tablesort/jquery-latest.js"></script>
+  <script src="{{ STATIC_URL }}lunch/tablesort/jquery.tablesorter.js"></script>
+  <link href='http://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+  <style>
+    html, body, h1, h2, table {
+      font-family: 'Montserrat', sans-serif;
+    }
+    .center {
+        margin-left: auto;
+        margin-right: auto;
+    }
+  </style>
+</head>
+<body>
+  {% block title %} <h1 style="text-align:center">Click "Name" or "Events Attended" to sort vendors.</h1> {% endblock %}
+
+  <div id="vendorContent" class="center">
+    {% block vendorContent %}{% endblock %}
+  </div>
+
+
+</body>
