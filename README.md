@@ -14,21 +14,42 @@ Module Overview
 | hipChat | **Posts** all Vendors at 5th & Minna to [HipChat room] (https://www.hipchat.com/gg6xjAniq) |
 | record | **Requests** all [Facebook Events](https://www.facebook.com/OffTheGridSF/events) for that day, **queries**  event description for Vendors, **calls** hipChat module, **updates** all Vendor attended attributes in database |
 
+To Run Locally
+----
 
-Crontab setup:
-```
-0 19  *   *   *    /path/to/project/record.sh >> /path/to/project/cron.log 2>&1
-```
-
-Install requirements in your virtualenv
+Install pip requirements in your virtualenv
 ```
 pip install -r requirements.txt
 ```
-Create db tables
+
+In ```gingerio/settings.py```, set:
+```
+DEBUG = True
+```
+and
+```
+STATIC_ROOT = '/absolute-path-to-project/static/'
+STATICFILES_DIRS = (
+  '/absolute-path-to-project/lunch/static/', # dont use ~ here
+)
+
+```
+Collect static files 
+```
+python manage.py collectstatic
+```
+Apply any migrations
 ```
 python manage.py migrate
 ```
 Run locally
 ```
 python manage.py runserver
+```
+
+Crontab setup:
+-----
+To make the ```record.sh``` script run at 11am PST everyday, run ```sudo crontab -e``` and add this line: 
+```
+0 19  *   *   *    /path/to/project/record.sh >> /path/to/project/cron.log 2>&1
 ```
