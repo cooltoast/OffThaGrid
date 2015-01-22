@@ -27,6 +27,7 @@ class Keys():
   pass
 
 def getTimeRange():
+  """Return last midnight and next midnight"""
   now = timezone.now()
   today = datetime(now.year, now.month, now.day)
   prevMid = int(time.mktime(today.timetuple()))
@@ -36,6 +37,7 @@ def getTimeRange():
   return prevMid, tomorrowMid
 
 def getEventsURL(keys):
+  """Return url and options for request"""
   since, until = getTimeRange()
   url = 'https://graph.facebook.com/OffTheGridSF/events'
 
@@ -54,11 +56,13 @@ def getEventsURL(keys):
 # and subtract their events from 31 days ago, but thats
 # dependent on consistently scraping events without fail.
 # Also, I think this method is more explicit and straightforward.
+
+# 2014.12.21
+# don't need to reset vendor attended integer attribute
+# we'll just overwrite it with the correct amount once per day.
+# VendorsModule.resetVendors()
 def updateVendors():
-  # 2014.12.21
-  # don't need to reset vendor attended integer attribute
-  # we'll just overwrite it with the correct amount once per day.
-  # VendorsModule.resetVendors()
+  """Update vendor attended count from Event db"""
 
   now = timezone.now()
   today = datetime(now.year, now.month, now.day)
@@ -92,6 +96,7 @@ def updateVendors():
   
 
 def scrapeEvents():
+  """Gets facebook events for the day and stores in db"""
   keys = Keys()
   eventsUrl, eventsOptions = getEventsURL(keys)
   r = requests.get(eventsUrl, params=eventsOptions)
