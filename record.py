@@ -93,6 +93,15 @@ def updateVendors():
 
   return
 
+
+def clearOldEvents():
+  """Removes events older than 30 days from database"""
+  now = timezone.now()
+  today = datetime(now.year, now.month, now.day)
+  thirtyOneDaysAgo = today - timedelta(days=31)
+  Event.objects.filter(date__lt=thirtyOneDaysAgo).delete()
+
+  return
   
 
 def scrapeEvents():
@@ -140,6 +149,7 @@ def scrapeEvents():
     HipChatModule.sendUpdate(WFvendors)
 
   updateVendors()
+  clearOldEvents()
 
   return
 
