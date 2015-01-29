@@ -16,9 +16,31 @@ Module Overview
 
 To Run Locally
 ----
-
+Create your postgres db
+```
+sudo su - postgres
+createdb <db>
+pqsl
+GRANT ALL PRIVILEGES ON DATABASE <db> TO <you>;
+```
+Add those credentials to ```gingerio/settings.py```
+```
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or             'oracle'.
+        'NAME': '<db>', # Or path to database file if using sqlite3.
+        # The following settings are not used with sqlite3:
+        'USER': '<you>',
+        'PASSWORD': '<password>',
+        'HOST': 'localhost', # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
+        'PORT': '', # Set to empty string for default.
+    }
+}
+```
 Install pip requirements in your virtualenv
 ```
+virtualenv <env>
+source <env>/bin/activate
 pip install -r requirements.txt
 ```
 
@@ -45,6 +67,17 @@ python manage.py migrate
 Run locally
 ```
 python manage.py runserver
+```
+
+Scraping Vendors from [Off The Grid's website](http://offthegridsf.com/vendors#food)
+------
+```
+python vendors.py scrape
+```
+Grabbing today's vendor appearances from [Facebook](https://www.facebook.com/OffTheGridSF/events)
+-----
+```
+python record.py
 ```
 
 Crontab setup:
