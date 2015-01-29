@@ -2,6 +2,7 @@ import json
 import requests
 
 def sendUpdate(vendors):
+  """Post message to hipChat room with vendor information"""
   data = open('keys.json')
   keys = json.load(data)
   data.close()

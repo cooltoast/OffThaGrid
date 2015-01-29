@@ -11,6 +11,7 @@ from pyquery import PyQuery as pq
 from lunch.models import Vendor
 
 def getVendors():
+  """Scrape vendors from site's raw html"""
   #r = requests.get('http://offthegridsf.com/vendors#food')
   URL = "http://offthegridsf.com/vendors#food"
   query = pq(url=URL)
@@ -23,6 +24,7 @@ def getVendors():
   return vendors
 
 def scrapeVendors():
+  """Scrape and save vendors to database's vendor table"""
   vendors = getVendors()
   vendorsAdded = 0
   for x in vendors:
@@ -42,6 +44,7 @@ def scrapeVendors():
   print "Saved %d new vendors to db" % vendorsAdded
 
 def resetVendors():
+  """Reset vendor attended counts"""
   for x in Vendor.objects.all():
     x.attended = 0
     x.save()

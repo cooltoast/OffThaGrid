@@ -9,6 +9,7 @@ django.setup()
 from lunch.models import Event
 
 def clearEvents():
+  """Delete event objects from db"""
   Event.objects.all().delete()
 
 def printEvents():

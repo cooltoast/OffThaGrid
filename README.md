@@ -1,6 +1,6 @@
 OffThaGrid
 ==========
-HipChat room: https://www.hipchat.com/gg6xjAniq
+HipChat room: https://www.hipchat.com/gg6xjAniq, guests unfortunately cannot view chat room history.
 
 There's a couple modules I used for this project. Here's an overview of what they each do.
 
