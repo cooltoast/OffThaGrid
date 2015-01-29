@@ -1,5 +1,5 @@
 #!/bin/sh
 
-/usr/bin/python /var/www/gingerio/record.py
+/usr/bin/python /path-to-your-project/record.py
 echo "scraping"
 
