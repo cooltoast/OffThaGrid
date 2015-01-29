@@ -2,7 +2,7 @@ import json
 import requests
 
 def sendUpdate(vendors):
-  data = open('/var/www/gingerio/keys.json')
+  data = open('keys.json')
   keys = json.load(data)
   data.close()
 

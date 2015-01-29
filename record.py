@@ -19,7 +19,7 @@ import vendors as VendorsModule
 
 class Keys():
   def __init__(self):
-    data = open('/var/www/gingerio/keys.json')
+    data = open('keys.json')
     self.keys = json.load(data)
     self.access_token = '%s|%s' % (self.keys["app_id"], self.keys["app_secret"])
     data.close()
